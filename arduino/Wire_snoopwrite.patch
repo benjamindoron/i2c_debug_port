@@ -1,0 +1,39 @@
+--- Wire.cpp	2023-01-09 17:36:56.472566047 -0500
++++ Wire.cpp	2023-01-09 17:38:33.299265680 -0500
+@@ -156,6 +156,11 @@
+   return endTransmission(true);
+ }
+ 
++int TwoWire::availableForWrite(void)
++{
++  return txBuffer.available();
++}
++
+ size_t TwoWire::write(uint8_t ucData)
+ {
+   // No writing, without begun transmission or a full buffer
+@@ -183,6 +188,11 @@
+   return quantity;
+ }
+ 
++int TwoWire::peekWrite(void)
++{
++  return txBuffer.peek();
++}
++
+ int TwoWire::available(void)
+ {
+   return rxBuffer.available();
+--- Wire.h	2023-01-09 17:36:55.182583155 -0500
++++ Wire.h	2023-01-09 17:38:16.668491193 -0500
+@@ -45,8 +45,10 @@
+     uint8_t requestFrom(uint8_t address, size_t quantity, bool stopBit);
+     uint8_t requestFrom(uint8_t address, size_t quantity);
+ 
++    virtual int availableForWrite(void);
+     size_t write(uint8_t data);
+     size_t write(const uint8_t * data, size_t quantity);
++    virtual int peekWrite(void);
+ 
+     virtual int available(void);
+     virtual int read(void);
